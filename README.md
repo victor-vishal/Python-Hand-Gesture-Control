@@ -37,32 +37,33 @@ Built with Python, OpenCV, MediaPipe (Tasks API for high performance), and PyAut
 
    
    
-2 . **Install the dependencies:**
-    It is recommended to use a virtual environment (venv).
-    
-    ```bash
-    pip install -r requirements.txt
-    ```
+2. **Install the dependencies:**
 
-    Bash
-    ```
-    pip install -r requirements.txt
-    ```
-    Download the MediaPipe Model:
-    This project uses the optimized MediaPipe Tasks API. You need to download the hand_landmarker.task file.
+   It is recommended to use a virtual environment (`venv`).
+   
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-Download it directly from Google here: Hand Landmarker Task
+3. **Download the MediaPipe Model:**
 
-Place the hand_landmarker.task file directly in the root folder of this project.
+   This project uses the optimized MediaPipe Tasks API. You need to download the `hand_landmarker.task` file.
 
-Run the engine:
+   Download it directly from Google here: [Hand Landmarker Task](https://developers.google.com/edge/mediapipe/solutions/vision/hand_landmarker)
 
-Bash
-python main.py
-📂 Project Architecture
+   Place the `hand_landmarker.task` file directly in the root folder of this project.
+
+4. **Run the engine:**
+
+   ```bash
+   python main.py
+   ```
+
+## 📂 Project Architecture
+
 This project is built with a clean, object-oriented structure to make it easy to read and expand:
 
-Plaintext
+```plaintext
 python-hand-gesture-control/
 │
 ├── core/
@@ -75,11 +76,11 @@ python-hand-gesture-control/
 ├── requirements.txt      # Project dependencies
 ├── README.md             
 └── main.py               # The main conductor and GUI loop
-
+```
 
 ## 🛠️ Configuration 
-You can easily tweak the feel of the mouse by editing core/config.py.
 
-Increase SENSITIVITY if you want the mouse to move further with less hand movement.
+You can easily tweak the feel of the mouse by editing `core/config.py`.
 
-Tweak CLICK_THRESHOLD if you want the pinching gestures to trigger earlier or later.
+* **SENSITIVITY**: Increase this if you want the mouse to move further with less hand movement.
+* **CLICK_THRESHOLD**: Tweak this if you want the pinching gestures to trigger earlier or later.
