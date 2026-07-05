@@ -38,12 +38,14 @@ class MouseEngine:
         """Main engine that translates landmarks into mouse actions."""
         thumb = landmarks[4]
         index = landmarks[8]
-        palm = landmarks[9]  # Our steering wheel
+        palm = landmarks[9]  # Steer
+        middle = landmarks[12] 
         pinky = landmarks[20]
 
         # 1. Check Distances & Finger States
         dist_left_click = self.get_distance(index, thumb)
         dist_right_click = self.get_distance(pinky, thumb)
+        dist_media = self.get_distance(middle, thumb) # <--- ADD THIS
         
         fingers_up = self.get_fingers_up(landmarks)
         is_peace_sign = fingers_up[0] and fingers_up[1] and not fingers_up[2] and not fingers_up[3]
@@ -65,6 +67,13 @@ class MouseEngine:
         final_x = np.clip(curr_x, 2, self.screen_w - 2)
         final_y = np.clip(curr_y, 2, self.screen_h - 2)
 
+        # --- UNIVERSAL SAFETY RELEASE ---
+        # If we were dragging, but the fingers are no longer pinched, drop the mouse immediately.
+        # This prevents the drag from getting stuck if you accidentally switch gestures.
+        if self.is_dragging and dist_left_click >= Config.CLICK_THRESHOLD:
+            pyautogui.mouseUp(button='left')
+            self.is_dragging = False
+
         # --- GESTURE ROUTER ---
         
         # Reset the swipe tracker safely outside the main chain
@@ -77,17 +86,19 @@ class MouseEngine:
             status_color = (255, 255, 0) # Cyan
             if self.prev_palm_x is not None:
                 movement_x = palm.x - self.prev_palm_x
-                # If hand moves fast enough horizontally, and cooldown has passed
                 if abs(movement_x) > 0.05 and (current_time - self.last_swipe_time > 1.0):
-                    if movement_x > 0: # Swipe right
+                    if movement_x > 0: 
                         pyautogui.hotkey('alt', 'tab')
                         status_text = "Swiped Right!"
-                    else: # Swipe left
+                    else: 
                         pyautogui.hotkey('alt', 'shift', 'tab')
                         status_text = "Swiped Left!"
                     self.last_swipe_time = current_time
             self.prev_palm_x = palm.x
-            self.prev_x, self.prev_y = final_x, final_y # Lock mouse during swipe
+
+            # --- ADD THIS LINE SO IT DOESN'T TELEPORT LATER ---
+            pyautogui.moveTo(final_x, final_y) 
+            self.prev_x, self.prev_y = final_x, final_y
 
         # Gesture 2: Vertical Scrolling (Peace Sign)
         elif is_peace_sign:
@@ -95,10 +106,30 @@ class MouseEngine:
             status_color = (255, 165, 0) # Orange
             # Calculate how much the hand moved up or down since last frame
             delta_y = target_y - self.prev_y
-            if abs(delta_y) > 5: # Anti-jitter deadzone
-                scroll_amount = int(-delta_y * 0.5) # PyAutoGUI scrolling is inverted
+            if abs(delta_y) > 5: 
+                scroll_amount = int(-delta_y * 0.5) 
                 pyautogui.scroll(scroll_amount)
-            self.prev_x, self.prev_y = final_x, final_y # Lock mouse cursor during scroll
+
+            # --- ADD THIS LINE SO IT DOESN'T TELEPORT LATER ---
+            pyautogui.moveTo(final_x, final_y) 
+            self.prev_x, self.prev_y = final_x, final_y
+
+        # Gesture: Volume Control (Thumb + Middle)
+        elif dist_media < Config.CLICK_THRESHOLD:
+            status_text = "Volume Control"
+            status_color = (255, 0, 255) # Magenta
+            
+            # Calculate vertical movement
+            delta_y = target_y - self.prev_y
+            
+            # Use a deadzone so it doesn't change volume if your hand is still
+            if delta_y < -3: 
+                pyautogui.press('volumeup')
+            elif delta_y > 3:
+                pyautogui.press('volumedown')
+                
+            pyautogui.moveTo(final_x, final_y) 
+            self.prev_x, self.prev_y = final_x, final_y
 
         # Gesture 3: Right Click (Thumb + Pinky)
         elif dist_right_click < Config.CLICK_THRESHOLD:

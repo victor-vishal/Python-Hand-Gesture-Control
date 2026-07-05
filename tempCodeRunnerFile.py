@@ -1,2 +1,2 @@
-, 0)
-                print("PiP Mode OFF")
+
+    pip_mode = False

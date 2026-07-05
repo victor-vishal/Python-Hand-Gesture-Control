@@ -8,7 +8,7 @@ class Config:
     # --- MOUSE SETTINGS ---
     SENSITIVITY = 3.5      
     SMOOTHING = 5         
-    CLICK_THRESHOLD = 0.05 
+    CLICK_THRESHOLD = 0.07 
     RIGHT_CLICK_COOLDOWN = 0.5 
 
     # --- HUD VISUALS ---
