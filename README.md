@@ -30,20 +30,18 @@ Built with Python, OpenCV, MediaPipe (Tasks API for high performance), and PyAut
 ## 🚀 Installation & Setup
 
 1. **Clone the repository:**
-   ```bash
-   git clone [https://github.com/YOUR_USERNAME/python-hand-gesture-control.git](https://github.com/YOUR_USERNAME/python-hand-gesture-control.git)
-   cd python-hand-gesture-control
-  ```
+```bash
+git clone [https://github.com/YOUR_USERNAME/python-hand-gesture-control.git](https://github.com/YOUR_USERNAME/python-hand-gesture-control.git)
+cd python-hand-gesture-control
+```
 
-   
-   
-2. **Install the dependencies:**
 
-   It is recommended to use a virtual environment (`venv`).
-   
-   ```bash
-   pip install -r requirements.txt
-   ```
+2. **Install the dependencies:** It is recommended to use a virtual environment (`venv`).
+
+```bash
+pip install -r requirements.txt
+```
+
 
 3. **Download the MediaPipe Model:**
 
