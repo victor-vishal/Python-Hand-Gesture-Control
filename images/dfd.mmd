@@ -1,0 +1,19 @@
+graph TD
+    %% Styling
+    classDef entity fill:#f9f,stroke:#333,stroke-width:2px,shape:square;
+    classDef process fill:#bbf,stroke:#333,stroke-width:2px;
+
+    %% Elements
+    E1[Entity 1: User]:::entity
+    P1((Process 1:<br>Camera Input)):::process
+    P2((Process 2:<br>AI Inference Layer)):::process
+    P3((Process 3:<br>Math Engine)):::process
+    P4((Process 4:<br>OS Interface)):::process
+    E2[Entity 2: Operating System]:::entity
+
+    %% Flow/Connections
+    E1 -->|Physical Hand Gestures| P1
+    P1 -->|Raw BGR Video Frames| P2
+    P2 -->|JSON/Array of X, Y, Z Landmark Coordinates<br>Converts BGR to RGB| P3
+    P3 -->|Defined System States<br>e.g., is_dragging = True| P4
+    P4 -->|Hardware Interrupts<br>Mouse Move, Scroll, Keystrokes| E2
